@@ -1,0 +1,13 @@
+Variable,Enduse,Units,Description
+DateTime,0,NA,NA
+Service,1,Kilowatts,Total office service load metered
+Lights,1,Kilowatts,"Design, lavatory, corner office, reception, and parlour lights"
+HP,1,Kilowatts,Total VRF heat pump load
+Work_Station_Receptacles,1,Kilowatts,"Work station plug loads for reception and research north, design douth and corner office, research middle and common wall"
+Phone_Alarm,1,Kilowatts,"Phone system, alarm, and miscellaneous office-wide IT loads"
+IDT,1,Fahrenheit,Indoor temperature (kitchen)
+WST,1,Fahrenheit,Outdoor temperature from NOAA sand point weather station
+Annualized_EUI,1,kBtu per Square Foot,Annualized energy use index
+Service_Billed,1,Kilowatts,Total office dervice load billed
+Annualized_EUI_Billed,1,kBtu per Square Foot,Annualized energy use index billed
+Server_Rack,1,Kilowatts,Office server rack

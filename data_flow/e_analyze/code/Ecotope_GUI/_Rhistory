@@ -1,0 +1,512 @@
+lines(t_clean,type="l")
+plot(Mod(X.hold)[0:(acq.freq/2)])
+X.hold=fft(t1)
+plot(Mod(X.hold)[0:(acq.freq/2)])
+test=c(test[1:5],rep(0,(length(trajectory)-10)),test[(length(trajectory)-5):length(trajectory)])
+test=fft(t1)
+test=c(test[1:5],rep(0,(length(trajectory)-10)),test[(length(trajectory)-5):length(trajectory)])
+X.unf=fft(X.hold,inverse=TRUE)/length(trajectory)
+X.unf=as.real(X.unf)
+plot(t1, type="l")
+lines(X.unf,type="l",col="red")
+X.hold=fft(t1)
+plot(Mod(X.hold)[0:(acq.freq/2)])
+thresh= 200
+X.hold[which(Mod(X.hold)<thresh)]=0
+test=fft(t1)
+test=c(test[1:5],rep(0,(length(trajectory)-10)),test[(length(trajectory)-5):length(trajectory)])
+X.unf=fft(X.hold,inverse=TRUE)/length(trajectory)
+X.unf=as.real(X.unf)
+plot(t1, type="l")
+lines(X.unf,type="l",col="red")
+lines(t_clean,type="l")
+lines(test,type="l",col="gren")
+lines(test,type="l",col="green")
+test
+plot(t1, type="l")
+lines(X.unf,type="l",col="red")
+lines(t_clean,type="l",col="blue")
+test=fft(t1)
+test=c(test[1:5],rep(0,(length(trajectory)-10)),test[(length(trajectory)-5):length(trajectory)])
+test=fft(test,inverse=TRUE)/length(trajectory)
+test=as.real(test)
+lines(test,type="l",col="green")
+plot(X.unf,type="l",col="red")
+lines(t_clean,type="l",col="blue")
+lines(test,type="l",col="green")
+? RMySQL
+librart(RMySQL)
+library(RMySQL)
+install.packages("RMySQL")
+library(RMySQL)
+source("E://R//cdx.R")
+cdx
+cdx()
+getdir()
+pwd()
+pdir()
+getwd()
+?ci
+a=c(1,2,4,1,6,8,4)
+summary(a)
+??ci
+install.packages("shiny")
+library(shiny)
+library("shiny")
+install.packages("shiny")
+library(Ecotope)
+cdx("dhpCycling")
+install.packages("devtools")
+library("devtools")
+install.packages("devtools")
+par()
+old_par=par()
+par$oma
+par()$oma
+shiny::runApp('F:/client/SeattleCityLight/McClellan/DENNING_GUI')
+cdx(Denning)
+library(EcotopePackage)
+cdx(Denning)
+cdx("Denning")
+library(EcotopePackage)
+library(foreign)
+library(zoo)
+library(reports)
+library(xlsx)
+library(dplyr)
+library(tidyr)
+library(doBy)
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+View(file001)
+?sub
+file001$Date=substr(as.character(file001$DateTime),1,11)
+View(file001)
+levels(file001$Date)
+levels(as.factor(file001$Date))
+file001$Date=substr(as.character(file001$DateTime),1,10)
+levels(as.factor(file001$Date))
+file001=Denning_append()
+time_diff=as.numeric(round(median(diff(file001$DateTime))))
+powerCorrection <- (215.0/242.0)
+file001$HPWH2watts = powerCorrection * file001$HPWH2kwh * 0.4167 * 60 / time_diff
+file001$HPWH1watts = powerCorrection * file001$HPWH1kwh * 0.4167 * 60 / time_diff
+powerA_50 <- 0.0000322
+powerB_50 <- -0.000336
+powerC_50 <- 0.422
+powerA_67 <- 0.0000275
+powerB_67 <- 0.00108
+powerC_67 <- 0.363
+COPA_50 <- 0.000242
+COPB_50 <- -0.0861
+COPC_50 <- 8.56
+COPA_67 <- 0.000343
+COPB_67 <- -0.115
+COPC_67 <- 11.0
+file001[ "inferredInletT1"] <- (-powerB_50 + sqrt(powerB_50^2 - 4*powerA_50*(powerC_50 - (file001[ "HPWH1watts"]/1000.0))))/(2 * powerA_50)
+summary(file001)
+file001[ "inferredInletT1"] <- (-powerB_67 + sqrt(powerB_67^2 - 4*powerA_67*(powerC_67 - (file001[ "HPWH1watts"]/1000.0))))/(2 * powerA_67)
+file001[ "inferredInletT2"] <- (-powerB_67 + sqrt(powerB_67^2 - 4*powerA_67*(powerC_67 - (file001[ "HPWH2watts"]/1000.0))))/(2 * powerA_67)
+file001[ "COP1_50"] <- COPA_50 * file001[ "inferredInletT1"]^2 + COPB_50*file001[ "inferredInletT1"] + COPC_50
+file001[ "COP2_50"] <- COPA_50 * file001[ "inferredInletT2"]^2 + COPB_50*file001[ "inferredInletT2"] + COPC_50
+file001[ "COP1_67"] <- COPA_67 * file001[ "inferredInletT1"]^2 + COPB_67*file001[ "inferredInletT1"] + COPC_67
+file001[ "COP2_67"] <- COPA_67 * file001[ "inferredInletT2"]^2 + COPB_67*file001[ "inferredInletT2"] + COPC_67
+file001[ "COP1"] <- (file001[ "IAT"] - 50)/(67 - 50) * (file001[ "COP1_67"] - file001[ "COP1_50"]) + file001[ "COP1_50"]
+file001[ "COP2"] <- (file001[ "IAT"] - 50)/(67 - 50) * (file001[ "COP2_67"] - file001[ "COP2_50"]) + file001[ "COP2_50"]
+file001[ "COP1_out"] <- (file001[ "OAT"] - 50)/(67 - 50) * (file001[ "COP1_67"] - file001[ "COP1_50"]) + file001[ "COP1_50"]
+file001[ "COP2_out"] <- (file001[ "OAT"] - 50)/(67 - 50) * (file001[ "COP2_67"] - file001[ "COP2_50"]) + file001[ "COP2_50"]
+View(file001)
+summary(file001)
+file001=Denning_append()
+time_diff=as.numeric(round(median(diff(file001$DateTime))))
+powerCorrection <- (215.0/242.0)
+file001$HPWH2watts = powerCorrection * file001$HPWH2kwh * 0.4167 * 60 / time_diff
+file001$inferredInletT1=NA
+file00$inferredInletT2=NA
+file001$COP1=NA
+file001$COP2=NA
+file001$COP1_out=NA
+file001$COP2_out=NA
+file001$inferredInletT2=NA
+powerA_50 <- 0.0000322
+powerB_50 <- -0.000336
+powerC_50 <- 0.422
+powerA_67 <- 0.0000275
+powerB_67 <- 0.00108
+powerC_67 <- 0.363
+COPA_50 <- 0.000242
+COPB_50 <- -0.0861
+COPC_50 <- 8.56
+COPA_67 <- 0.000343
+COPB_67 <- -0.115
+COPC_67 <- 11.0
+file001[ "inferredInletT1"] <- (-powerB_50 + sqrt(powerB_50^2 - 4*powerA_50*(powerC_50 - (file001[ "HPWH1watts"]/1000.0))))/(2 * powerA_50)
+file001$HPWH2watts = powerCorrection * file001$HPWH2kwh * 0.4167 * 60 / time_diff
+file001$HPWH1watts = powerCorrection * file001$HPWH1kwh * 0.4167 * 60 / time_diff
+file001[ "inferredInletT1"] <- (-powerB_50 + sqrt(powerB_50^2 - 4*powerA_50*(powerC_50 - (file001[ "HPWH1watts"]/1000.0))))/(2 * powerA_50)
+file001[ "inferredInletT2"] <- (-powerB_50 + sqrt(powerB_50^2 - 4*powerA_50*(powerC_50 - (file001[ "HPWH2watts"]/1000.0))))/(2 * powerA_50)
+file001[ "inferredInletT1"] <- (-powerB_67 + sqrt(powerB_67^2 - 4*powerA_67*(powerC_67 - (file001[ "HPWH1watts"]/1000.0))))/(2 * powerA_67)
+file001[ "inferredInletT2"] <- (-powerB_67 + sqrt(powerB_67^2 - 4*powerA_67*(powerC_67 - (file001[ "HPWH2watts"]/1000.0))))/(2 * powerA_67)
+file001[ "COP1_50"] <- COPA_50 * file001[ "inferredInletT1"]^2 + COPB_50*file001[ "inferredInletT1"] + COPC_50
+file001[ "COP2_50"] <- COPA_50 * file001[ "inferredInletT2"]^2 + COPB_50*file001[ "inferredInletT2"] + COPC_50
+file001[ "COP1_67"] <- COPA_67 * file001[ "inferredInletT1"]^2 + COPB_67*file001[ "inferredInletT1"] + COPC_67
+file001[ "COP2_67"] <- COPA_67 * file001[ "inferredInletT2"]^2 + COPB_67*file001[ "inferredInletT2"] + COPC_67
+file001[ "COP1"] <- (file001[ "IAT"] - 50)/(67 - 50) * (file001[ "COP1_67"] - file001[ "COP1_50"]) + file001[ "COP1_50"]
+file001[ "COP2"] <- (file001[ "IAT"] - 50)/(67 - 50) * (file001[ "COP2_67"] - file001[ "COP2_50"]) + file001[ "COP2_50"]
+file001[ "COP1_out"] <- (file001[ "OAT"] - 50)/(67 - 50) * (file001[ "COP1_67"] - file001[ "COP1_50"]) + file001[ "COP1_50"]
+file001[ "COP2_out"] <- (file001[ "OAT"] - 50)/(67 - 50) * (file001[ "COP2_67"] - file001[ "COP2_50"]) + file001[ "COP2_50"]
+file001[ "COP1_50"]=NULL
+file001[ "COP2_50"]=NULL
+file001[ "COP1_67"]=NULL
+file001[ "COP2_67"]=NULL
+summary(file001)
+View(file001)
+file001=Denning_append()
+source("impute_and_infer.R")
+save(file001,file="../DENNING_GUI/data.rda")
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shiny::runApp('//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI')
+names(file001)
+getwd()
+source("data_dictionary.R")
+cdx("Denning")
+file001=Denning_append()
+source("impute_and_infer.R")
+save(file001,data_dictionary,file="../DENNING_GUI/data.rda")
+source("data_dictionary.R")
+save(file001,data_dictionary,file="../DENNING_GUI/data.rda")
+file.copy(from="../data_dictionary.csv",to="../DENNING_GUI/data_dictionary.csv")
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+data_dictionary=read.csv("./data_dictionary.csv")
+View(data_dictionary)
+library(reports)
+library(ggplot2)
+library(reshape2)
+rdas=list.files(pattern=".rda")
+for (file in rdas) {load(file)}
+source("./plot_gui.R")
+shiny::runApp('//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI')
+shinyapps::deployApp()
+shiny::runApp('//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI')
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shinyapps::deployApp()
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+siteFiles
+print(file)
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+View(file001)
+names(file001)
+summary(file001)
+names(file001)
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+View(file001)
+levels(as.factor(file001$DateTime2))
+class(file001$DateTime2)
+file001$Date=substr(file001,from=1,to=10)
+?substr
+file001$Date=substr(file001$DateTime2,from=1,to=10)
+file001$Date=substr(file001$DateTime2,start=1,stop=10)
+View(file001)
+siteFiles=list.files(path=site_path,pattern=".csv")
+siteFiles
+file=McClellan_18.csv
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+View(tmpfile)
+tmpfile=name_fix(tmpfile)
+View(tmpfile)
+tmpfile$Date=substr(tmpfile$DateTime2,start=1,stop=10)
+View(tmpfile)
+tmpfile$Date=substr(tmpfile$DateTime2,start=1,stop=7)
+View(tmpfile)
+tmpfile$Date=substr(tmpfile$DateTime2,start=1,stop=8)
+View(file001)
+View(tmpfile)
+levels(as.factor(tmpfile$Date))
+tmpfile$Time=substr(tmpfile$DateTime2,start=10,stop=15)
+View(tmpfile)
+tmpfile$Time=substr(tmpfile$DateTime2,start=10,stop=2)
+View(tmpfile)
+tmpfile$Time=substr(tmpfile$DateTime2,start=10,stop=22)
+View(tmpfile)
+tmpfile$DateTime2=NULL
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+try(tmpfile$Date=substr(tmpfile$DateTime2,start=1,stop=8))
+try(tmpfile$Time=substr(tmpfile$DateTime2,start=10,stop=22))
+try(tmpfile$DateTime2=NULL)
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+tmpfile$Date=try(substr(tmpfile$DateTime2,start=1,stop=8))
+tmpfile$Time=try(substr(tmpfile$DateTime2,start=10,stop=22))
+try(tmpfile$DateTime2=NULL)
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+traceback()
+file=siteFiles[1]
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+tmpfile=name_fix(tmpfile)
+View(tmpfile)
+tmpfile$Date=try(substr(tmpfile$DateTime2,start=1,stop=8))
+tmpfile$Time=try(substr(tmpfile$DateTime2,start=10,stop=22))
+try(tmpfile$DateTime2=NULL)
+try(tmpfile["DateTime2"]=NULL)
+tmpfile$DateTime2=NULL
+View(tmpfile)
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+tmpfile$Date=try(substr(tmpfile$DateTime2,start=1,stop=8))
+tmpfile$Time=try(substr(tmpfile$DateTime2,start=10,stop=22))
+tmpfile$DateTime2=NULL
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+file
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+tmpfile=name_fix(tmpfile)
+tmpfile$Date=try(substr(tmpfile$DateTime2,start=1,stop=8))
+tmpfile$Time=try(substr(tmpfile$DateTime2,start=10,stop=22))
+tmpfile$DateTime2=NULL
+this=try(substr(tmpfile$DateTime2,start=1,stop=8))
+this
+class(this)
+this=substr(tmpfile$DateTime2,start=1,stop=8)
+this
+View(tmpfile)
+length(this)
+if (length(this)>1)   tmpfile$Date=this
+this=try(substr(tmpfile$DateTime2,start=10,stop=22))
+if (length(this)>1)   tmpfile$Time=this
+tmpfile$DateTime2=NULL
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+this=substr(tmpfile$DateTime2,start=1,stop=8)
+if (length(this)>1)   tmpfile$Date=this
+this=try(substr(tmpfile$DateTime2,start=10,stop=22))
+if (length(this)>1)   tmpfile$Time=this
+tmpfile$DateTime2=NULL
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+View(file001)
+file001$dateTime <- paste(file001$Date, file001$Time)
+file001$DateTime <- as.POSIXct(file001$dateTime, format = "%m/%d/%y %I:%M:%S %p", tz = "GMT")
+View(file001)
+dateTime <- paste(file001$Date, file001$Time)
+file001$DateTime <- as.POSIXct(dateTime, format = "%m/%d/%y %I:%M:%S %p", tz = "GMT")
+file001=data.frame()
+for (file in siteFiles){
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+if("try-error" %in% class(tmpfile)) next
+#remove non-ascii
+tmpfile=name_fix(tmpfile)
+this=substr(tmpfile$DateTime2,start=1,stop=8)
+if (length(this)>1)   tmpfile$Date=this
+this=try(substr(tmpfile$DateTime2,start=10,stop=22))
+if (length(this)>1)   tmpfile$Time=this
+tmpfile$DateTime2=NULL
+#     file001=try(merge(file001,tmpfile,by=c("Date","Time"),all=TRUE)
+file001=rbind.all.columns(file001,tmpfile)
+}
+dateTime <- paste(file001$Date, file001$Time)
+file001$DateTime <- as.POSIXct(dateTime, format = "%m/%d/%y %I:%M:%S %p", tz = "GMT")
+View(file001)
+file001$Time=NULL
+file001$Date=NULL
+file001=file001[,c(ncol(file001),(1:(ncol(file001)-1)))]
+file001=file001[!is.na(file001$DateTime),]
+file001=continuous_uniform_time(file001)
+View(file001)
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+source("impute_and_infer.R")
+save(file001,file="../data.rda")
+save(file001,file="../DENNING_GUI/data.rda")
+shiny::runApp('//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI')
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shinyapps::deployApp()
+start_ind=0
+enduses=c("IAT","OAT")
+obs=3
+start=round(start_ind*nrow(file001))
+if (start==0) start=1
+time_diff=as.numeric(round(median(diff(file001$DateTime))))
+obs=obs*1440/time_diff
+n_finish=start+obs
+time_diff
+attributes(time_diff)
+median(diff(file001$DateTime))
+attributes(median(diff(file001$DateTime)))
+time_diff=as.numeric(round(median(diff(file001$DateTime)),units="minutes"))
+time_diff=as.numeric(round(median(diff(file001$DateTime)),units="secs"))/60
+time_diff=as.numeric(round(median(diff(file001$DateTime))),units="minutes")
+time_diff=as.numeric(round(median(diff(file001$DateTime))),units="secs")
+time_diff=as.numeric(round(median(diff(file001$DateTime))),units="secs")/60
+time_diff
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+time_diff=median(diff(file001$DateTime))
+time_diff
+time_diff=median(diff(file001$DateTime),units="secs")/60
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+source("impute_and_infer.R")
+View(file001)
+save(file001,file="../data.rda")
+save(file001,file="../DENNING_GUI/data.rda")
+shiny::runApp('//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI')
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shinyapps::deployApp()
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+site_path="../data/"
+siteFiles=list.files(path=site_path,pattern=".csv")
+siteFiles
+file001=data.frame()
+file="McClellan_11.csv"
+print(file)
+tmpfile=try(read.csv(paste0(site_path,"./",file),skip=0))
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+source("impute_and_infer.R")
+save(file001,file="../data.rda")
+View(file001)
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+View(file001)
+source("impute_and_infer.R")
+save(file001,file="../data.rda")
+save(file001,file="../DENNING_GUI/data.rda")
+shinyapps::deployApp()
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shinyapps::deployApp()
+summary(file001)
+sapply(file001,2,function(x){is.numeric(x)})
+apply(file001,2,function(x){is.numeric(x)})
+str(file001)
+nums=sapply(file001,is.numeric)
+nums
+x=file001[,3]
+mean(x)
+mean(x,na.rm=TRUE)
+sd(x,na.rm=TRUE)
+which(x>(a+10*b) | x>(a-10*b))
+a=mean(x,na.rm=TRUE)
+b=sd(x,na.rm=TRUE)
+which(x>(a+10*b)
+)
+which(x>(a+10*b) | x>(a-10*b))
+which(x>(a+10*b) | x<(a-10*b))
+summary(file001)
+nums=sapply(file001,is.numeric)
+file001[,num2]=apply(file001[,num2],2,function(x){
+a=mean(x,na.rm=TRUE)
+b=sd(x,na.rm=TRUE)
+crazy_vals=which(x>(a+10*b) | x<(a-10*b))
+if (length(crazy_vals)>0) x[crazy_vals]=NA
+})
+file001[,nums]=apply(file001[,nums],2,function(x){
+a=mean(x,na.rm=TRUE)
+b=sd(x,na.rm=TRUE)
+crazy_vals=which(x>(a+10*b) | x<(a-10*b))
+if (length(crazy_vals)>0) x[crazy_vals]=NA
+})
+summary(file001)
+file001=Denning_append()
+source("impute_and_infer.R")
+nums=sapply(file001,is.numeric)
+cdx("Denning")
+source("Denning_functions.R")
+file001=Denning_append()
+source("impute_and_infer.R")
+nums=sapply(file001,is.numeric)
+nums
+summary(file001)
+file001[,nums]=apply(file001[,nums],2,function(x){
+a=mean(x,na.rm=TRUE)
+b=sd(x,na.rm=TRUE)
+crazy_vals=which(x>(a+10*b) | x<(a-10*b))
+if (length(crazy_vals)>0) x[crazy_vals]=NA
+return(x)
+})
+summary(file001)
+save(file001,file="../data.rda")
+save(file001,file="../DENNING_GUI/data.rda")
+setwd("//storage/CONSULT/client/SeattleCityLight/McClellan/DENNING_GUI")
+shinyapps::deployApp()

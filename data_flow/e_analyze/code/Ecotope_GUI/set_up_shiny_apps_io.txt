@@ -1,0 +1,10 @@
+https://www.shinyapps.io/admin/#/tokens# 
+install.packages('devtools')
+devtools::install_github('rstudio/shinyapps')
+shinyapps::setAccountInfo(name='ecotope', 
+                            token='B8D715FA18EC13DBC44B3F643885D857', 
+                            secret='cnC+0Vfr/tOhfg7F30H9RYHsnLtpt3ZnJFeDjATs')
+  library(shinyapps)
+#remember to set proper working directory
+  shinyapps::deployApp()
+
